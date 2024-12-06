@@ -4,6 +4,7 @@ fetch("./data.json")
     let accountData = data.data;
     let ravanue = 0;
     let expense = 0;
+    let totalValue = 0;
 
     console.log(accountData);
 
@@ -13,7 +14,7 @@ fetch("./data.json")
           ravanue += account.total_value;
         }
       });
-      console.log("$" + ravanue);
+      console.log(`Revenue: $${ravanue}`);
     }
 
     function expenseFun() {
@@ -22,9 +23,30 @@ fetch("./data.json")
           expense += account.total_value;
         }
       });
-      console.log("$" + expense);
+      console.log(`Expense : $${expense}`);
+    }
+    function grossProfitMargin() {
+      accountData.forEach((account) => {
+        if (
+          account.account_type === "sales" &&
+          account.value_type === "debit"
+        ) {
+          totalValue += account.total_value;
+        }
+      });
+      let grossProfitRatio = (totalValue / ravanue) * 100;
+      console.log(`Gross profit margin: ${grossProfitRatio}%`);
+    }
+
+    function netProfitMargin() {
+      console.log(ravanue);
+      console.log(expense);
+      let np = ((ravanue - expense) / ravanue) * 100;
+      console.log(`Net profit margin: ${Math.round(np)}%`);
     }
 
     revenuefun();
     expenseFun();
+    grossProfitMargin();
+    netProfitMargin();
   });
