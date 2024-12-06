@@ -5,6 +5,7 @@ fetch("./data.json")
     let ravanue = 0;
     let expense = 0;
     let totalValue = 0;
+    let totalAssetsValue = 0;
 
     console.log(accountData);
 
@@ -45,8 +46,37 @@ fetch("./data.json")
       console.log(`Net profit margin: ${Math.round(np)}%`);
     }
 
+    function assets() {
+      let totalAssetsDebit = 0;
+      let totalAssetsCredit = 0;
+
+      accountData.forEach((account) => {
+        if (
+          account.account_category === "assets" &&
+          account.value_type === "debit" &&
+          (account.account_type === "current" ||
+            account.account_type === "bank" ||
+            account.account_type === "current_accounts_receivable")
+        ) {
+          totalAssetsDebit += account.total_value;
+        }
+        if (
+          account.account_category === "assets" &&
+          account.value_type === "credit" &&
+          (account.account_type === "current" ||
+            account.account_type === "bank" ||
+            account.account_type === "current_accounts_receivable")
+        ) {
+          totalAssetsCredit += account.total_value;
+        }
+      });
+      totalAssetsValue = totalAssetsDebit - totalAssetsCredit;
+      console.log(`Total Assets Value: ${totalAssetsValue}`);
+    }
+
     revenuefun();
     expenseFun();
     grossProfitMargin();
     netProfitMargin();
+    assets();
   });
