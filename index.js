@@ -2,20 +2,19 @@ fetch("./data.json")
   .then((data) => data.json())
   .then((data) => {
     let accountData = data.data;
-    let ravanue = 0;
+    let revenue = 0;
     let expense = 0;
     let totalValue = 0;
     let totalAssetsValue = 0;
 
-    console.log(accountData);
-
-    function revenuefun() {
+    function revenueFun() {
       accountData.forEach((account) => {
         if (account.account_category === "revenue") {
-          ravanue += account.total_value;
+          revenue += account.total_value;
         }
       });
-      console.log(`Revenue: $${ravanue}`);
+
+      console.log(`Revenue: $${Math.round(revenue).toLocaleString()}`);
     }
 
     function expenseFun() {
@@ -24,7 +23,7 @@ fetch("./data.json")
           expense += account.total_value;
         }
       });
-      console.log(`Expense : $${expense}`);
+      console.log(`Expenses : $${Math.round(expense).toLocaleString()}`);
     }
     function grossProfitMargin() {
       accountData.forEach((account) => {
@@ -35,16 +34,16 @@ fetch("./data.json")
           totalValue += account.total_value;
         }
       });
-      let grossProfitRatio = (totalValue / ravanue) * 100;
-      console.log(`Gross rofit margin: ${grossProfitRatio}%`);
+      let grossProfitRatio = (totalValue / revenue) * 100;
+      console.log(`Gross Profit Margin: ${grossProfitRatio}%`);
     }
 
     function netProfitMargin() {
-      let np = ((ravanue - expense) / ravanue) * 100;
-      console.log(`Net profit margin: ${Math.round(np)}%`);
+      let np = ((revenue - expense) / revenue) * 100;
+      console.log(`Net Profit Margin: ${Math.round(np)}%`);
     }
 
-    function assets() {
+    function WorkingCapital() {
       let totalAssetsDebit = 0;
       let totalAssetsCredit = 0;
       let totalLiabilityCredit = 0;
@@ -94,9 +93,9 @@ fetch("./data.json")
       console.log(`Working Capital Ratio: ${Math.round(workingCapitalRatio)}%`);
     }
 
-    revenuefun();
+    revenueFun();
     expenseFun();
     grossProfitMargin();
     netProfitMargin();
-    assets();
+    WorkingCapital();
   });
