@@ -36,12 +36,10 @@ fetch("./data.json")
         }
       });
       let grossProfitRatio = (totalValue / ravanue) * 100;
-      console.log(`Gross profit margin: ${grossProfitRatio}%`);
+      console.log(`Gross rofit margin: ${grossProfitRatio}%`);
     }
 
     function netProfitMargin() {
-      console.log(ravanue);
-      console.log(expense);
       let np = ((ravanue - expense) / ravanue) * 100;
       console.log(`Net profit margin: ${Math.round(np)}%`);
     }
@@ -49,6 +47,8 @@ fetch("./data.json")
     function assets() {
       let totalAssetsDebit = 0;
       let totalAssetsCredit = 0;
+      let totalLiabilityCredit = 0;
+      let totalLiabilityDebit = 0;
 
       accountData.forEach((account) => {
         if (
@@ -69,9 +69,29 @@ fetch("./data.json")
         ) {
           totalAssetsCredit += account.total_value;
         }
+        if (
+          account.account_category === "liability" &&
+          account.value_type === "credit" &&
+          (account.account_type === "current" ||
+            account.account_type === "current_accounts_payable")
+        ) {
+          totalLiabilityCredit += account.total_value;
+        }
+        if (
+          account.account_category === "liability" &&
+          account.value_type === "debit" &&
+          (account.account_type === "current" ||
+            account.account_type === "current_accounts_payable")
+        ) {
+          totalLiabilityDebit += account.total_value;
+        }
       });
-      totalAssetsValue = totalAssetsDebit - totalAssetsCredit;
-      console.log(`Total Assets Value: ${totalAssetsValue}`);
+      totalLiabilityValue = (totalLiabilityCredit - totalLiabilityDebit) / 100;
+      totalAssetsValue = (totalAssetsDebit - totalAssetsCredit) / 100;
+
+      let workingCapitalRatio = totalAssetsValue - totalLiabilityValue;
+
+      console.log(`Working Capital Ratio: ${Math.round(workingCapitalRatio)}%`);
     }
 
     revenuefun();
